@@ -13,10 +13,15 @@ before_install:
   - free -h
   - df -h
   - sudo systemctl stop docker.service && sudo systemctl stop docker.socket
-  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
-  - yes | sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
-  - sudo apt-get update
-  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+  - for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
+  - wget https://download.docker.com/linux/ubuntu/dists/focal/pool/stable/amd64/containerd.io_1.7.24-1_amd64.deb
+  - wget https://download.docker.com/linux/ubuntu/dists/focal/pool/stable/amd64/docker-ce_24.0.6-1~ubuntu.20.04~focal_amd64.deb
+  - wget https://download.docker.com/linux/ubuntu/dists/focal/pool/stable/amd64/docker-ce-cli_24.0.6-1~ubuntu.20.04~focal_amd64.deb
+  - wget https://download.docker.com/linux/ubuntu/dists/focal/pool/stable/amd64/docker-buildx-plugin_0.19.3-1~ubuntu.20.04~focal_amd64.deb
+  - sudo dpkg -i containerd.io_1.7.24-1_amd64.deb
+  - sudo dpkg -i docker-ce_24.0.6-1~ubuntu.20.04~focal_amd64.deb
+  - sudo dpkg -i docker-ce-cli_24.0.6-1~ubuntu.20.04~focal_amd64.deb
+  - sudo dkpg -i docker-buildx-plugin_0.19.3-1~ubuntu.20.04~focal_amd64.deb
   - sudo systemctl start docker.service && sudo systemctl start docker.socket
   - docker -v && docker-compose -v
   - sudo rm /usr/local/bin/docker-compose
