@@ -1,7 +1,5 @@
 language: minimal
 
-services: docker
-
 env:
   - DOCKER_COMPOSE_VERSION=v2.23.0
 
@@ -12,8 +10,6 @@ before_install:
   - cat /proc/cpuinfo
   - free -h
   - df -h
-  - sudo systemctl stop docker.service && sudo systemctl stop docker.socket
-  - for pkg in docker.io docker-doc docker-compose docker-compose-v2 podman-docker containerd runc; do sudo apt-get remove $pkg; done
   - wget https://download.docker.com/linux/ubuntu/dists/focal/pool/stable/amd64/containerd.io_1.7.24-1_amd64.deb
   - wget https://download.docker.com/linux/ubuntu/dists/focal/pool/stable/amd64/docker-ce_24.0.6-1~ubuntu.20.04~focal_amd64.deb
   - wget https://download.docker.com/linux/ubuntu/dists/focal/pool/stable/amd64/docker-ce-cli_24.0.6-1~ubuntu.20.04~focal_amd64.deb
@@ -22,12 +18,12 @@ before_install:
   - yes | sudo dpkg -i docker-ce_24.0.6-1~ubuntu.20.04~focal_amd64.deb
   - yes | sudo dpkg -i docker-ce-cli_24.0.6-1~ubuntu.20.04~focal_amd64.deb
   - yes | sudo dkpg -i docker-buildx-plugin_0.19.3-1~ubuntu.20.04~focal_amd64.deb
-  - sudo systemctl start docker.service && sudo systemctl start docker.socket
-  - docker -v && docker-compose -v
+  - sudo service docker start
   - sudo rm /usr/local/bin/docker-compose
   - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
   - chmod +x docker-compose
   - sudo mv docker-compose /usr/local/bin
+  - docker -v && docker-compose -v
 
 install:
   - docker-compose -f docker-compose.yml build
