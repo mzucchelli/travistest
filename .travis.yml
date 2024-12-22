@@ -6,9 +6,10 @@ env:
   - DOCKER_COMPOSE_VERSION=v2.23.0
 
 before_install:
+  - pwd
   - cat /etc/lsb-release
   - cat /proc/cpuinfo
-  - free -m
+  - free -h
   - df -h
   - docker -v && docker-compose -v
   - sudo rm /usr/local/bin/docker-compose
